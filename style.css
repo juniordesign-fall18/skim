@@ -1,0 +1,72 @@
+#bold {
+	font-weight: bold;
+}
+
+#bluebgrd {
+	padding-top: 8%;
+	padding-bottom: 8%;
+	background-color: #47BCEC;
+	border-radius: 5%;
+}
+
+.dropdown {
+	margin-bottom: 15%;
+}
+
+#dropdown {
+	background-color: #47BCEC !important;
+}
+
+.main {
+	padding: 50;
+}
+
+
+.row-space {
+	margin-top: 15%;
+}
+
+.dash {
+	padding-top: 35%; 
+	font-size: 70%;
+	padding-bottom: 0%;
+	margin-bottom: 0%;
+	text-align: center;
+}
+
+h1 {
+	text-align: center;
+	font-size: 60px;
+	padding-top: 0px;
+}
+
+#capacity, #drop, #waitlist, #percent {
+	color: #47BCEC;
+	text-align: center;
+	margin-bottom: 0px;
+}
+#myChart {
+	padding-top: 0px;
+	margin-top: 0px;
+}
+
+#update {
+	background-color: #47BCEC;
+	border-color: #47BCEC;
+	margin-left: 8%;
+	min-width: 180px;
+}
+
+#subjectselect {
+	margin-left: 10%;
+	min-width: 180px;
+}
+#courseselect{
+	margin-left: 10%;
+	min-width: 180px;
+}
+
+#yearselect {
+	margin-left: 10%;
+	min-width: 180px;
+}
