@@ -2,7 +2,7 @@
 Course Enrollment Data Visualization Tool for UAH
 
 ## Dependencies
-- [Python 3](https://www.python.org/downloads/)
+- [Python 2](https://www.python.org/downloads/)
 - [Flask](https://github.com/pallets/flask)
 - [Requests](https://github.com/requests/requests)
 - [python-firebase](https://github.com/ozgur/python-firebase)
