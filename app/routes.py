@@ -29,6 +29,10 @@ def stripHTML(data):
 
 @app.route('/data')
 def data_fetch():
-    url = urllib.request.urlopen(URL)
-    output = url.read().decode('utf-8')
-    return str(stripHTML(output))
+    fetched_data = urllib.request.urlopen(URL).read().decode('utf-8')
+    class_data = stripHTML(fetched_data)
+    s = ""
+    for section in class_data:
+        s += '<br>'.join(section)
+        s += '<br><br>'
+    return s
