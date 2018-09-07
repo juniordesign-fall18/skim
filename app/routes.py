@@ -31,8 +31,10 @@ def stripHTML(data):
 def data_fetch():
     fetched_data = urllib.request.urlopen(URL).read().decode('utf-8')
     class_data = stripHTML(fetched_data)
+    # class_data is of the form [[line, line, ...], [line, line, ....], ...]
     s = ""
     for section in class_data:
         s += '<br>'.join(section)
         s += '<br><br>'
+        print('\n'.join(section))
     return s
