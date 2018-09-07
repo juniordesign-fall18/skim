@@ -5,6 +5,9 @@ import datetime
 import json
 import urllib.request
 
+from flask import render_template, request
+
+
 URL = 'https://www.uah.edu/cgi-bin/schedule.pl?file=sprg2018.html&segment=ACC'
 
 config = {
@@ -84,4 +87,10 @@ def data_fetch():
         result[user.key()] = user.val()
         print(user.val())
     result = json.dumps(result)
-    return result
+    #return result
+    return render_template('index.html',data=result)
+
+@app.route('/data',methods=['POST'])
+def on_post():
+    user_query = request.form['search']
+    return user_query 
