@@ -1,24 +1,31 @@
 from app import app
-from firebase import firebase
+# from firebase import firebase
+import pyrebase
 import datetime
 import json
 import urllib.request
 
 URL = 'https://www.uah.edu/cgi-bin/schedule.pl?file=sprg2018.html&segment=ACC'
 
+config = {
+  "apiKey": "AIzaSyB5bnl9QMIeQRFHg5Io5CfKEFLCTyMGIYU",
+  "authDomain": "skim-7d0f7.firebaseapp.com",
+  "databaseURL": "https://skim-7d0f7.firebaseio.com/",
+  "storageBucket": "skim-7d0f7.appspot.com",
+}
+
+firebase = pyrebase.initialize_app(config)
+db = firebase.database()
+
 @app.route('/')
 
 @app.route('/index')
 def index():
-    dbapp = firebase.FirebaseApplication('https://skim-7d0f7.firebaseio.com/', None)
-    result = dbapp.get('/test', None)
-    return result
+    return "Hello, World!"
 
 
 @app.route('/datastore')
 def data_store():
-    dbapp = firebase.FirebaseApplication('https://skim-7d0f7.firebaseio.com/', None)
-
     fetched_data = urllib.request.urlopen(URL).read().decode('utf-8')
     class_data = stripHTML(fetched_data)
 
@@ -33,30 +40,16 @@ def data_store():
 
             while '' in newline:
                 newline.remove('')
-
-            #fix waitlist issues
             
-            classEntry = {"courseAndSection": newline[1], "name": newline[2], "maxEnrollment": newline[4], "currentEnrollment": newline[5], "waitlist": newline[7].split(" ")[:1], "semester": "spring", "year": "2018"}
+            course_number, section = newline[1].split(" ")[0], newline[1].split(" ")[1]
+            title = newline[2]
+            waitlist = newline[7].split(" ")[0]
+            
+            classEntry = {"name": title, "section": section, "currentEnrollment": newline[5], "maxEnrollment": newline[4], "waitlist": waitlist, "semester": "spring", "year": "2018"}
 
-            dbapp.post('https://skim-7d0f7.firebaseio.com/', classEntry)
-
-
-    # courses = class_data[0]
-    # newline = courses[0].split("  ")
-    #
-    # if newline[0].isalpha():
-    #     newline.remove(newline[0])
-    #
-    # while '' in newline:
-    #     newline.remove('')
-    #
-    # classEntry = {"courseAndSection": newline[0], "name": newline[1], "maxEnrollment": newline[3], "currentEnrollment": newline[4], "waitlist": newline[6], "semester": "spring", "year": "2018"}
-    #
-    # dbapp.post('https://skim-7d0f7.firebaseio.com/', classEntry)
+            result = db.child("ACC").child(course_number).set(classEntry)
 
     return "0"
-
-
 
 
 def stripHTML(data):
@@ -72,31 +65,23 @@ def stripHTML(data):
         split_data = split_data[hr_index:]
     return results
 
+
 @app.route('/data')
 def data_fetch():
     fetched_data = urllib.request.urlopen(URL).read().decode('utf-8')
     class_data = stripHTML(fetched_data)
     # class_data is of the form [[line, line, ...], [line, line, ....], ...]
     s = ""
-    for section in class_data:
-        s += '<br>'.join(section)
-        s += '<br><br>'
-        print('\n'.join(section))
-    return s
+    # for section in class_data:
+    #     s += '<br>'.join(section)
+    #     s += '<br><br>'
+    #     print('\n'.join(section))
+    # return s
 
-
-# def data_store():
-#     AccountingForBusiness = {"courseNumber": "210", "sectionNumber": "01", "name": "Accounting For Business", "maxEnrollment": "53", "currentEnrollment": "49", "waitlist": "0"} db.child("skim-7d0f7").push(AccountingForBusiness, user['idToken'])
-
-# dbapp = db.reference('https://skim-7d0f7.firebaseio.com/')
-# classes_dbapp = dbapp.child('classes')
-# classes_dbapp.set({
-#     'alanisawesome': {
-#         'date_of_birth': 'June 23, 1912',
-#         'full_name': 'Alan Turing'
-#     },
-#     'gracehop': {
-#         'date_of_birth': 'December 9, 1906',
-#         'full_name': 'Grace Hopper'
-#     }
-# })
+    result = {}
+    all_users = db.child("ACC").get()
+    for user in all_users.each():
+        result[user.key()] = user.val()
+        print(user.val())
+    result = json.dumps(result)
+    return result

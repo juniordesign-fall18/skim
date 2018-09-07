@@ -5,7 +5,7 @@ Course Enrollment Data Visualization Tool for UAH
 - [Python 3.4.9](https://www.python.org/downloads/)
 - [Flask](https://github.com/pallets/flask)
 - [Requests](https://github.com/requests/requests)
-- [python-firebase](https://github.com/ozgur/python-firebase)
+- [Pyrebase](https://github.com/thisbejim/Pyrebase)
 
 For the development setup, add the following line to your .profile
 
