@@ -7,6 +7,12 @@ Course Enrollment Data Visualization Tool for UAH
 - [Requests](https://github.com/requests/requests)
 - [python-firebase](https://github.com/ozgur/python-firebase)
 
+For the development setup, add the following line to your .profile
+
+```
+eval "$(pyenv init -)"
+```
+
 ## Getting Started
 
 1. Clone this repository
