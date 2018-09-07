@@ -74,23 +74,30 @@ def data_fetch():
     fetched_data = urllib.request.urlopen(URL).read().decode('utf-8')
     class_data = stripHTML(fetched_data)
     # class_data is of the form [[line, line, ...], [line, line, ....], ...]
-    s = ""
+    # s = ""
     # for section in class_data:
     #     s += '<br>'.join(section)
     #     s += '<br><br>'
     #     print('\n'.join(section))
     # return s
-
     result = {}
-    all_users = db.child("ACC").get()
-    for user in all_users.each():
-        result[user.key()] = user.val()
-        print(user.val())
+    all_classes = db.child("ACC").get()
+    for c in all_classes.each():
+        result[c.key()] = c.val()
     result = json.dumps(result)
-    #return result
-    return render_template('index.html',data=result)
+    return render_template('index.html', data=result)
 
 @app.route('/data',methods=['POST'])
 def on_post():
     user_query = request.form['search']
-    return user_query 
+    query = []
+    for l in user_query:
+        if l.isdigit():
+            query.append(user_query[:user_query.index(l)])
+            query.append(user_query[user_query.index(l):])
+            break
+    all_classes = db.child(query[0]).child(query[1]).get()
+    result = {}
+    for c in all_classes.each():
+        result[c.key()] = c.val()
+    return json.dumps(result)
