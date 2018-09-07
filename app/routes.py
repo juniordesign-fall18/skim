@@ -14,8 +14,21 @@ def index():
     result = dbapp.get('/test', None)
     return result
 
+def stripHTML(data):
+    split_data = [x.strip() for x in data.split('\n')]
+    results = []
+    pre_tag = '<pre>'
+    hr_tag = '<HR>'
+    while (pre_tag in split_data):
+        pre_index = split_data.index(pre_tag)
+        split_data = split_data[pre_index:]
+        hr_index = split_data.index(hr_tag)
+        results.append(split_data[4:hr_index])
+        split_data = split_data[hr_index:]
+    return results
+
 @app.route('/data')
 def data_fetch():
     url = urllib.request.urlopen(URL)
-    output = url.read()
-    return output
+    output = url.read().decode('utf-8')
+    return str(stripHTML(output))
