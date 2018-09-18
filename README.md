@@ -17,7 +17,5 @@ eval "$(pyenv init -)"
 
 1. Clone this repository
 2. ``` bash
-   $ export FLASK_ENV=development
-   $ export FLASK_APP=app
-   $ python -m flask run
+   $ sh run.sh
    ```
