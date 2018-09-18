@@ -7,8 +7,7 @@ import urllib.request
 
 from flask import render_template, request
 
-
-URL = 'https://www.uah.edu/cgi-bin/schedule.pl?file=sprg2018.html&segment=ACC'
+index_URL = 'https://www.uah.edu/cgi-bin/schedule.pl?file=sprg2018.html'
 
 config = {
   "apiKey": "AIzaSyB5bnl9QMIeQRFHg5Io5CfKEFLCTyMGIYU",
@@ -29,8 +28,8 @@ def index():
 
 @app.route('/datastore')
 def data_store():
-    fetched_data = urllib.request.urlopen(URL).read().decode('utf-8')
-    class_data = stripHTML(fetched_data)
+    fetched_data = urllib.request.urlopen(getSegmentURL('ACC')).read().decode('utf-8')
+    class_data = stripClassData(fetched_data)
 
     for x in range(len(class_data)):
         courses = class_data[x]
@@ -54,8 +53,10 @@ def data_store():
 
     return "0"
 
+def getSegmentURL(class_code):
+    return index_URL + '&segment=' + class_code
 
-def stripHTML(data):
+def stripClassData(data):
     split_data = [x.strip() for x in data.split('\n')]
     results = []
     pre_tag = '<pre>'
@@ -68,11 +69,26 @@ def stripHTML(data):
         split_data = split_data[hr_index:]
     return results
 
+def stripClassNames(data):
+    split_data = [x.strip() for x in data.split('\n')]
+    pre_tag = '<pre>'
+    end_tag = '</pre>'
+    pre_index = split_data.index(pre_tag)
+    end_index = split_data.index(end_tag)
+    split_data = split_data[pre_index+1:end_index]
+    results = [line[line.index('>')+1:line.index('</')] for line in split_data]
+    return results
+
+@app.route('/segments')
+def seg_fetch():
+    fetched_data = urllib.request.urlopen(index_URL).read().decode('utf-8')
+    print(stripClassNames(fetched_data))
+    return "0"
 
 @app.route('/data')
 def data_fetch():
-    fetched_data = urllib.request.urlopen(URL).read().decode('utf-8')
-    class_data = stripHTML(fetched_data)
+    fetched_data = urllib.request.urlopen(getSegmentURL('ACC')).read().decode('utf-8')
+    class_data = stripClassData(fetched_data)
     # class_data is of the form [[line, line, ...], [line, line, ....], ...]
     # s = ""
     # for section in class_data:
