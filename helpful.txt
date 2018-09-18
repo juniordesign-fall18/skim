@@ -1,0 +1,3 @@
+https://www.quora.com/How-can-my-flask-app-fetch-data-from-an-API-every-10-minutes
+https://apscheduler.readthedocs.io/en/latest/userguide.html
+https://codereview.stackexchange.com/questions/131371/script-to-print-weather-report-from-openweathermap-api
