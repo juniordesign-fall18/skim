@@ -21,14 +21,9 @@ db = firebase.database()
 
 @app.route('/')
 
-@app.route('/index')
-def index():
-    return "Hello, World!"
-
-
 @app.route('/datastore')
 def data_store():
-    fetched_data = urllib.request.urlopen(getSegmentURL('ACC')).read().decode('utf-8')
+    fetched_data = getDecodedRequestSegment('ACC')
     class_data = stripClassData(fetched_data)
 
     for x in range(len(class_data)):
@@ -51,10 +46,49 @@ def data_store():
 
             result = db.child("ACC").child(course_number).set(classEntry)
 
-    return "0"
+    return "Data stored"
+
+@app.route('/segments')
+def seg_fetch():
+    fetched_data = getDecodedRequest()
+    class_names = stripClassNames(fetched_data)
+    return str(class_names)
+
+@app.route('/data')
+def data_fetch():
+    fetched_data = getDecodedRequestSegment('ACC')
+    class_data = stripClassData(fetched_data)
+    # class_data is of the form [[line, line, ...], [line, line, ....], ...]
+    result = {}
+    all_classes = db.child("ACC").get()
+    for c in all_classes.each():
+        result[c.key()] = c.val()
+    result = json.dumps(result)
+    return render_template('index.html', data=result)
+
+@app.route('/data',methods=['POST'])
+def on_post():
+    user_query = request.form['search']
+    query = []
+    for l in user_query:
+        if l.isdigit():
+            query.append(user_query[:user_query.index(l)])
+            query.append(user_query[user_query.index(l):])
+            break
+    all_classes = db.child(query[0]).child(query[1]).get()
+    result = {}
+    for c in all_classes.each():
+        result[c.key()] = c.val()
+    return json.dumps(result)
 
 def getSegmentURL(class_code):
     return index_URL + '&segment=' + class_code
+
+def getDecodedRequestSegment(segment):
+    return urllib.request.urlopen(getSegmentURL(segment)).read().decode('utf-8')
+
+def getDecodedRequest():
+    return urllib.request.urlopen(index_URL).read().decode('utf-8')
 
 def stripClassData(data):
     split_data = [x.strip() for x in data.split('\n')]
@@ -78,42 +112,3 @@ def stripClassNames(data):
     split_data = split_data[pre_index+1:end_index]
     results = [line[line.index('>')+1:line.index('</')] for line in split_data]
     return results
-
-@app.route('/segments')
-def seg_fetch():
-    fetched_data = urllib.request.urlopen(index_URL).read().decode('utf-8')
-    print(stripClassNames(fetched_data))
-    return "0"
-
-@app.route('/data')
-def data_fetch():
-    fetched_data = urllib.request.urlopen(getSegmentURL('ACC')).read().decode('utf-8')
-    class_data = stripClassData(fetched_data)
-    # class_data is of the form [[line, line, ...], [line, line, ....], ...]
-    # s = ""
-    # for section in class_data:
-    #     s += '<br>'.join(section)
-    #     s += '<br><br>'
-    #     print('\n'.join(section))
-    # return s
-    result = {}
-    all_classes = db.child("ACC").get()
-    for c in all_classes.each():
-        result[c.key()] = c.val()
-    result = json.dumps(result)
-    return render_template('index.html', data=result)
-
-@app.route('/data',methods=['POST'])
-def on_post():
-    user_query = request.form['search']
-    query = []
-    for l in user_query:
-        if l.isdigit():
-            query.append(user_query[:user_query.index(l)])
-            query.append(user_query[user_query.index(l):])
-            break
-    all_classes = db.child(query[0]).child(query[1]).get()
-    result = {}
-    for c in all_classes.each():
-        result[c.key()] = c.val()
-    return json.dumps(result)
