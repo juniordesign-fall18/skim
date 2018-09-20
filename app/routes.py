@@ -22,8 +22,8 @@ db = firebase.database()
 @app.route('/')
 
 @app.route('/datastore')
-def data_store():
-    fetched_data = getDecodedRequestSegment('ACC')
+def data_store(segment):
+    fetched_data = getDecodedRequestSegment(segment)
     class_data = stripClassData(fetched_data)
 
     for x in range(len(class_data)):
@@ -44,17 +44,19 @@ def data_store():
             
             classEntry = {"name": title, "section": section, "currentEnrollment": newline[5], "maxEnrollment": newline[4], "waitlist": waitlist, "semester": "spring", "year": "2018"}
 
-            result = db.child("ACC").child(course_number).set(classEntry)
+            result = db.child(segment).child(course_number).set(classEntry)
 
     return "Data stored"
 
 @app.route('/segments')
 def seg_fetch():
     fetched_data = getDecodedRequest()
-    class_names = stripClassNames(fetched_data)
-    return str(class_names)
+    dep_names = stripClassNames(fetched_data)
+    for dep in dep_names:
+        data_store(dep)
+    return str(dep_names)
 
-@app.route('/data')
+@app.route('/search')
 def data_fetch():
     fetched_data = getDecodedRequestSegment('ACC')
     class_data = stripClassData(fetched_data)
@@ -66,7 +68,7 @@ def data_fetch():
     result = json.dumps(result)
     return render_template('index.html', data=result)
 
-@app.route('/data',methods=['POST'])
+@app.route('/search',methods=['POST'])
 def on_post():
     user_query = request.form['search']
     query = []
