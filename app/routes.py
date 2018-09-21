@@ -7,7 +7,12 @@ import urllib.request
 
 from flask import render_template, request
 
-index_URL = 'https://www.uah.edu/cgi-bin/schedule.pl?file=sprg2018.html'
+index_URL = 'https://www.uah.edu/cgi-bin/schedule.pl?file='
+
+current_year = 2018
+current_semester = 0
+
+# semester is denoted as 0 = sprg, 1 = fall
 
 config = {
   "apiKey": "AIzaSyB5bnl9QMIeQRFHg5Io5CfKEFLCTyMGIYU",
@@ -22,8 +27,8 @@ db = firebase.database()
 @app.route('/')
 
 @app.route('/datastore')
-def data_store(segment):
-    fetched_data = getDecodedRequestSegment(segment)
+def data_store(segment, year, semester):
+    fetched_data = getDecodedRequestSegment(segment, year, semester)
     class_data = stripClassData(fetched_data)
 
     for x in range(len(class_data)):
@@ -53,12 +58,13 @@ def seg_fetch():
     fetched_data = getDecodedRequest()
     dep_names = stripClassNames(fetched_data)
     for dep in dep_names:
-        data_store(dep)
+        #data_store(dep)
+        print('')
     return str(dep_names)
 
 @app.route('/search')
 def data_fetch():
-    fetched_data = getDecodedRequestSegment('ACC')
+    fetched_data = getDecodedRequestSegment('ACC', current_year, current_semester)
     class_data = stripClassData(fetched_data)
     # class_data is of the form [[line, line, ...], [line, line, ....], ...]
     result = {}
@@ -83,11 +89,13 @@ def on_post():
         result[c.key()] = c.val()
     return json.dumps(result)
 
-def getSegmentURL(class_code):
-    return index_URL + '&segment=' + class_code
+def getSegmentURL(segment, year, semester):
+    season = 'sprg' if semester == 0 else 'fall'
+    archived = '' if year == current_year else '&dir=archived'
+    return index_URL + str(season) + str(year) + '.html&segment=' + segment + archived
 
-def getDecodedRequestSegment(segment):
-    return urllib.request.urlopen(getSegmentURL(segment)).read().decode('utf-8')
+def getDecodedRequestSegment(segment, year, semester):
+    return urllib.request.urlopen(getSegmentURL(segment, year, semester)).read().decode('utf-8')
 
 def getDecodedRequest():
     return urllib.request.urlopen(index_URL).read().decode('utf-8')
