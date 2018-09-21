@@ -55,11 +55,13 @@ def data_store(segment, year, semester):
 
 @app.route('/segments')
 def seg_fetch():
-    fetched_data = getDecodedRequest()
-    dep_names = stripClassNames(fetched_data)
-    for dep in dep_names:
-        #data_store(dep)
-        print('')
+    for i in range(2018, 2019):
+        for j in range(2):
+            if j != 1:
+                fetched_data = getDecodedRequest(i, j)
+                dep_names = stripClassNames(fetched_data)
+                for dep in dep_names:
+                    data_store(dep, i, j)
     return str(dep_names)
 
 @app.route('/search')
@@ -89,16 +91,23 @@ def on_post():
         result[c.key()] = c.val()
     return json.dumps(result)
 
-def getSegmentURL(segment, year, semester):
+def getIndexURL(year, semester):
     season = 'sprg' if semester == 0 else 'fall'
     archived = '' if year == current_year else '&dir=archived'
-    return index_URL + str(season) + str(year) + '.html&segment=' + segment + archived
+    return index_URL + str(season) + str(year) + '.html' + archived
+
+def getSegmentURL(segment, year, semester):
+    return getIndexURL(year, semester) + '&segment=' + segment
 
 def getDecodedRequestSegment(segment, year, semester):
-    return urllib.request.urlopen(getSegmentURL(segment, year, semester)).read().decode('utf-8')
+    url = getSegmentURL(segment, year, semester)
+    print(url)
+    return urllib.request.urlopen(url).read().decode('utf-8')
 
-def getDecodedRequest():
-    return urllib.request.urlopen(index_URL).read().decode('utf-8')
+def getDecodedRequest(year, semester):
+    url = getIndexURL(year, semester)
+    print(url)
+    return urllib.request.urlopen(url).read().decode('utf-8')
 
 def stripClassData(data):
     split_data = [x.strip() for x in data.split('\n')]
