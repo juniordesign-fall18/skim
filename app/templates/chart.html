@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Skim</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
+        crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+        crossorigin="anonymous">
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+        crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+    <style>
+        .hidden{ display:none;}
+    </style>
+
+</head>
+<body>
+    <div class="col-sm-3">
+        <div id="subjectdropdown">
+            <select id="subjectpicker" class="selectpicker">
+                {% for subject in data.keys() | sort %}
+                <option value="{{ subject }}">{{ subject }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% for subject, subject_data in data.items() %}
+        <div id="{{ subject }}dropdown" class="hidden">
+            <select id="{{ subject }}picker" class="selectpicker">
+                {% for class_no in subject_data.keys() | sort %}
+                <option value="{{ class_no }}">{{ class_no }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% endfor %}
+        <div class="row row-space">
+            <button type="button" id="update" class="btn btn-secondary">Update Graph</button>
+        </div>
+        </form>
+    </div>
+    <div id="graph" class="col-sm-9">
+        <canvas height="40%" width="100%" id="myChart"></canvas>
+    </div>
+    <script>
+        $displayed = "";
+        $('#subjectpicker').on('change', function () {
+            $newSubject = $(this).val();
+            if ($displayed != "")
+                $($displayed).addClass('hidden')
+            $displayed = '#' + $newSubject + 'dropdown';
+            $($displayed).removeClass('hidden');
+        });
+        $("#update").click(updateChart);
+
+        updateChart();
+
+        function updateChart() {
+            $('#myChart').remove(); // this is my <canvas> element
+            $('#graph').append('<canvas height="40%" width="100%" id="myChart"><canvas>');
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var chart = new Chart(ctx, {
+                // The type of chart we want to create
+                type: 'line',
+                // The data for our dataset
+                data: {
+                    labels: [
+                        {% for item in data['ACC']['210'][0] %}
+                            "{{ item }}",
+                        {% endfor %}
+                    ],
+        datasets: [{
+            label: "Class Registration Data",
+            backgroundColor: 'transparent',
+            borderColor: 'rgb(71,188,236)',
+            data: [
+                {% for item in data['ACC']['210'][1] %}
+                                {{ item }},
+        {% endfor %}
+        ]
+                    }],
+                },
+        // Configuration options go here
+        options: { }
+            });
+        }
+    </script>
+</body>
+
+</html>

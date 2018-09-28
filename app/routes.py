@@ -53,6 +53,25 @@ def data_store(segment, year, semester):
 
     return "Data stored"
 
+@app.route('/chart')
+def chart_fetch():
+    subjects = db.get().val()
+    class_dict = {}
+    for subject, classes in subjects.items():
+        class_dict[subject] = {}
+        for class_no, years in classes.items():
+            currentEnrollment_data = []
+            maxEnrollment_data = []
+            labels = []
+            for year, semesters in sorted(years.items()):
+                for semester, data in reversed(sorted(semesters.items())):
+                    maxEnrollment_data.append(data["maxEnrollment"])
+                    currentEnrollment_data.append(data["currentEnrollment"])
+                    labels.append(semester + " " + year)
+            class_dict[subject][class_no] = (labels, currentEnrollment_data, maxEnrollment_data)
+    return render_template('chart.html', data=class_dict)
+    
+
 @app.route('/segments')
 def seg_fetch():
     for i in range(2018, 2019):
