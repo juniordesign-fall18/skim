@@ -31,6 +31,11 @@ def data_store(segment, year, semester):
     fetched_data = getDecodedRequestSegment(segment, year, semester)
     class_data = stripClassData(fetched_data)
 
+    if semester == 0:
+        sem = "Spring"
+    else:
+        sem = "Fall"
+
     for x in range(len(class_data)):
         courses = class_data[x]
 
@@ -47,9 +52,9 @@ def data_store(segment, year, semester):
             title = newline[2]
             waitlist = newline[7].split(" ")[0]
             
-            classEntry = {"name": title, "section": section, "currentEnrollment": newline[5], "maxEnrollment": newline[4], "waitlist": waitlist, "semester": "spring", "year": "2018"}
+            classEntry = {"name": title, "section": section, "currentEnrollment": newline[5], "maxEnrollment": newline[4], "waitlist": waitlist}
 
-            result = db.child(segment).child(course_number).set(classEntry)
+            result = db.child(segment).child(course_number).child(year).child(sem).set(classEntry)
 
     return "Data stored"
 
@@ -74,7 +79,7 @@ def chart_fetch():
 
 @app.route('/segments')
 def seg_fetch():
-    for i in range(2018, 2019):
+    for i in range(2017, 2018):
         for j in range(2):
             if j != 1:
                 fetched_data = getDecodedRequest(i, j)
