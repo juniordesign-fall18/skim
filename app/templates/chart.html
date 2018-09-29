@@ -99,10 +99,16 @@
                     labels:
                         json_data[subject][classNo][0],
                     datasets: [{
-                        label: "Class Registration Data",
+                        label: "Current Enrollment",
                         backgroundColor: 'transparent',
                         borderColor: 'rgb(71,188,236)',
                         data: json_data[subject][classNo][1].map(Number),
+                    }, 
+                    {
+                        label: "Max Enrollment",
+                        backgroundColor: 'transparent',
+                        borderColor: 'rgb(236,188,71)',
+                        data: json_data[subject][classNo][2].map(Number),
                     }],
                     // Configuration options go here
                     options: {}
