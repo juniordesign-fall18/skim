@@ -43,6 +43,7 @@
     </style>
 
 </head>
+
 <body>
     <div class="col-sm-3">
         <div id="subjectdropdown">
@@ -78,37 +79,34 @@
             $displayed = '#' + $newSubject + 'dropdown';
             $($displayed).removeClass('hidden');
         });
-        $("#update").click(updateChart);
 
+        var json_data = {{ data | tojson }};
+        $("#update").click(updateChart);
         updateChart();
 
         function updateChart() {
             $('#myChart').remove(); // this is my <canvas> element
             $('#graph').append('<canvas height="40%" width="100%" id="myChart"><canvas>');
             var ctx = document.getElementById('myChart').getContext('2d');
+            var subject = $("#subjectpicker").val();
+            var classNo = $("#" + subject + "picker").val();
+            console.log(json_data[subject][classNo][1].map(Number))
             var chart = new Chart(ctx, {
                 // The type of chart we want to create
                 type: 'line',
                 // The data for our dataset
                 data: {
-                    labels: [
-                        {% for item in data['ACC']['210'][0] %}
-                            "{{ item }}",
-                        {% endfor %}
-                    ],
-        datasets: [{
-            label: "Class Registration Data",
-            backgroundColor: 'transparent',
-            borderColor: 'rgb(71,188,236)',
-            data: [
-                {% for item in data['ACC']['210'][1] %}
-                                {{ item }},
-        {% endfor %}
-        ]
+                    labels:
+                        json_data[subject][classNo][0],
+                    datasets: [{
+                        label: "Class Registration Data",
+                        backgroundColor: 'transparent',
+                        borderColor: 'rgb(71,188,236)',
+                        data: json_data[subject][classNo][1].map(Number),
                     }],
-                },
-        // Configuration options go here
-        options: { }
+                    // Configuration options go here
+                    options: {}
+                }
             });
         }
     </script>
