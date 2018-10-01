@@ -47,7 +47,7 @@
 <body>
     <div class="col-sm-3">
         <div id="subjectdropdown">
-            <select id="subjectpicker" class="selectpicker">
+            <select id="subjectpicker" class="selectpicker" data-live-search="true">
                 {% for subject in data.keys() | sort %}
                 <option value="{{ subject }}">{{ subject }}</option>
                 {% endfor %}
@@ -55,7 +55,7 @@
         </div>
         {% for subject, subject_data in data.items() %}
         <div id="{{ subject }}dropdown" class="hidden">
-            <select id="{{ subject }}picker" class="selectpicker">
+            <select id="{{ subject }}picker" class="selectpicker" data-live-search="true">
                 {% for class_no in subject_data.keys() | sort %}
                 <option value="{{ class_no }}">{{ class_no }}</option>
                 {% endfor %}
