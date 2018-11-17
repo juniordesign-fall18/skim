@@ -1,18 +1,9 @@
 from app import app
-# from firebase import firebase
 import pyrebase
 import datetime
 import json
 import urllib.request
-
 from flask import render_template, request
-
-index_URL = 'https://www.uah.edu/cgi-bin/schedule.pl?file='
-
-current_year = 2018
-current_semester = 0
-
-# semester is denoted as 0 = sprg, 1 = fall
 
 config = {
   "apiKey": "AIzaSyB5bnl9QMIeQRFHg5Io5CfKEFLCTyMGIYU",
@@ -24,41 +15,12 @@ config = {
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 
+index_URL = 'https://www.uah.edu/cgi-bin/schedule.pl?file='
+
+current_year = 2018
+current_semester = 0
+
 @app.route('/')
-
-@app.route('/datastore')
-def data_store(segment, year, semester):
-    fetched_data = getDecodedRequestSegment(segment, year, semester)
-    class_data = stripClassData(fetched_data)
-
-    if semester == 0:
-        sem = "Spring"
-    else:
-        sem = "Fall"
-
-    for x in range(len(class_data)):
-        courses = class_data[x]
-
-        for s in range(len(courses)):
-            newline = courses[s].split("  ")
-
-            if newline[0].isalpha():
-                newline.remove(newline[0])
-
-            while '' in newline:
-                newline.remove('')
-            
-            course_number, section = newline[1].split(" ")[0], newline[1].split(" ")[1]
-            title = newline[2]
-            waitlist = newline[7].split(" ")[0]
-            
-            classEntry = {"name": title, "section": section, "currentEnrollment": newline[5], "maxEnrollment": newline[4], "waitlist": waitlist}
-
-            result = db.child(segment).child(course_number).child(year).child(sem).set(classEntry)
-
-    return "Data stored"
-
-@app.route('/chart')
 def chart_fetch():
     subjects = db.get().val()
     class_dict = {}
@@ -75,7 +37,31 @@ def chart_fetch():
                     labels.append(semester + " " + year)
             class_dict[subject][class_no] = (labels, currentEnrollment_data, maxEnrollment_data)
     return render_template('chart.html', data=class_dict)
-    
+
+@app.route('/datastore')
+def data_store(segment, year, semester):
+    fetched_data = getDecodedRequestSegment(segment, year, semester)
+    class_data = stripClassData(fetched_data)
+
+    if semester == 0:
+        sem = "Spring"
+    else:
+        sem = "Fall"
+        
+    for x in range(len(class_data)):
+        courses = class_data[x]
+        for s in range(len(courses)):
+            newline = courses[s].split("  ")
+            if newline[0].isalpha():
+                newline.remove(newline[0])
+            while '' in newline:
+                newline.remove('')
+            course_number, section = newline[1].split(" ")[0], newline[1].split(" ")[1]
+            title = newline[2]
+            waitlist = newline[7].split(" ")[0]
+            classEntry = {"name": title, "section": section, "currentEnrollment": newline[5], "maxEnrollment": newline[4], "waitlist": waitlist}
+            result = db.child(segment).child(course_number).child(year).child(sem).set(classEntry)
+    return "Data stored"
 
 @app.route('/segments')
 def seg_fetch():
@@ -86,34 +72,8 @@ def seg_fetch():
                 dep_names = stripClassNames(fetched_data)
                 for dep in dep_names:
                     data_store(dep, i, j)
-    return str(dep_names)
-
-@app.route('/search')
-def data_fetch():
-    fetched_data = getDecodedRequestSegment('ACC', current_year, current_semester)
-    class_data = stripClassData(fetched_data)
-    # class_data is of the form [[line, line, ...], [line, line, ....], ...]
-    result = {}
-    all_classes = db.child("ACC").get()
-    for c in all_classes.each():
-        result[c.key()] = c.val()
-    result = json.dumps(result)
-    return render_template('index.html', data=result)
-
-@app.route('/search',methods=['POST'])
-def on_post():
-    user_query = request.form['search']
-    query = []
-    for l in user_query:
-        if l.isdigit():
-            query.append(user_query[:user_query.index(l)])
-            query.append(user_query[user_query.index(l):])
-            break
-    all_classes = db.child(query[0]).child(query[1]).get()
-    result = {}
-    for c in all_classes.each():
-        result[c.key()] = c.val()
-    return json.dumps(result)
+    # return str(dep_names)
+    return "Data successfully stored"
 
 def getIndexURL(year, semester):
     season = 'sprg' if semester == 0 else 'fall'
