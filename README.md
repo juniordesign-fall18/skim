@@ -15,4 +15,4 @@ For the development setup, add the following line to your .profile:
 
 ## Getting Started
 1. Clone this repository
-2. Run `sh run_win.sh` if on windows, or `sh run_mac.sh` if on mac
+2. Run `run_win.sh` if on windows, or `sh run_mac.sh` if on mac
