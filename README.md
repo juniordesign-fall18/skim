@@ -15,8 +15,4 @@ For the development setup, add the following line to your .profile:
 
 ## Getting Started
 1. Clone this repository
-2. Run the following commands: 
-	``` bash 
-	$ export FLASK_ENV=development 
-	$ export FLASK_APP=app 
-	$ python -m flask run ```
+2. Run `sh run_win.sh` if on windows, or `sh run_mac.sh` if on mac
