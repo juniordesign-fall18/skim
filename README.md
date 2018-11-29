@@ -30,6 +30,6 @@ Flask, Requests, and Pyrebase can all be installed using pip as well:
 ### Getting Started
 1. Install dependencies
 2. Clone this repository
-3. Run `run_win.sh` if on windows, or `sh run_mac.sh` if on mac/linux
+3. Run `run_win.sh` if on Windows, or `sh run_mac.sh` if on Mac/Linux
 
-Running the project on linux has not been tested, but there is no clear reason as to why it wouldn't (should be the same as mac)
+Running the project on Linux has not been tested, but there is no clear reason as to why it wouldn't (should be the same as mac)
