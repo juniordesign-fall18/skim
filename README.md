@@ -1,5 +1,5 @@
 # Skim
-A Course Enrollment Data Visualization Tool for UAH
+Skim is a course data visualization tool designed for the University of Alabama in Huntsville. Skim allows administrators to compare class enrollment data accross years and allows administrators to view enrollment data of different classes on the same graph. Skim is designed to be used as a tool in assisting administrators with defining current course max capacities. 
 
 ## Dependencies
 -  [Python 3.4.9](https://www.python.org/downloads/)
