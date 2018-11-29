@@ -12,6 +12,10 @@ A Course Enrollment Data Visualization Tool for UAH
 	 - Toggle trendline appearance for each course
  - Reset functionality for clearing graph
 
+### Known Bugs and Defects:
+- Accessibility compliance for graph colors
+- Auto-refresh of data
+
 ## Dependencies
 
 -  [Python 3.4.9](https://www.python.org/downloads/)
