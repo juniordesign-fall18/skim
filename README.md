@@ -9,7 +9,7 @@ A Course Enrollment Data Visualization Tool for UAH
 -  [flask](https://github.com/pallets/flask)
 -  [requests](https://github.com/requests/requests)
 -  [Pyrebase](https://github.com/thisbejim/Pyrebase)
--  [pyenv] (https://github.com/pyenv/pyenv)
+-  [pyenv](https://github.com/pyenv/pyenv)
 
 Flask, Requests, and Pyrebase can all be installed using pip as well:
 `pip install flask requests pyrebase`
