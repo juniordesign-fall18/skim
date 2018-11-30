@@ -1,4 +1,4 @@
-# Skim
+## Skim
 Skim is a course data visualization tool designed for the University of Alabama in Huntsville. Skim allows administrators to compare class enrollment data accross years and allows administrators to view enrollment data of different classes on the same graph. Skim is designed to be used as a tool to assist administrators with defining current course max capacities.
 
 ## Release Notes for Version 1.0
@@ -35,5 +35,5 @@ Flask, Requests, and Pyrebase can all be installed using pip as well:
 
 Running the project on Linux has not been tested, but there is no clear reason as to why it wouldn't (should be the same as mac)
 
-#Authors
+### Authors
 Rajat Khanna, Nikita Rajput, Alicia Chan, Avanti Joshi, Lisna Vargheese
