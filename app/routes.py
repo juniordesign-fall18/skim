@@ -47,7 +47,7 @@ def data_store(segment, year, semester):
         sem = "Spring"
     else:
         sem = "Fall"
-        
+
     for x in range(len(class_data)):
         courses = class_data[x]
         for s in range(len(courses)):

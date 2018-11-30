@@ -1,5 +1,5 @@
 # Skim
-Skim is a course data visualization tool designed for the University of Alabama in Huntsville. Skim allows administrators to compare class enrollment data accross years and allows administrators to view enrollment data of different classes on the same graph. Skim is designed to be used as a tool to assist administrators with defining current course max capacities. 
+Skim is a course data visualization tool designed for the University of Alabama in Huntsville. Skim allows administrators to compare class enrollment data accross years and allows administrators to view enrollment data of different classes on the same graph. Skim is designed to be used as a tool to assist administrators with defining current course max capacities.
 
 ## Release Notes for Version 1.0
 ### New Software Features:
@@ -34,3 +34,6 @@ Flask, Requests, and Pyrebase can all be installed using pip as well:
 3. Run `run_win.sh` if on windows, or `sh run_mac.sh` if on mac/linux. The purpose of these shell scripts is to set your python environment and flask environment variables, and then actually start the server on your local machine. These should NOT be used for actual deployment.
 
 Running the project on Linux has not been tested, but there is no clear reason as to why it wouldn't (should be the same as mac)
+
+#Authors
+Rajat Khanna, Nikita Rajput, Alicia Chan, Avanti Joshi, Lisna Vargheese

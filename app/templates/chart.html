@@ -3,6 +3,7 @@
 
 <head>
     <title>Skim</title>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <!-- Latest compiled and minified CSS -->
@@ -37,6 +38,7 @@
 </head>
 
 <body>
+  
     <div class="col-sm-3">
         <div id="subjectdropdown">
             <select id="subjectpicker" class="selectpicker" data-live-search="true" title="Choose a subject">
@@ -55,9 +57,9 @@
         </div>
         {% endfor %}
         <div class="row row-space">
-            <button type="button" id="update" class="btn btn-secondary">Update Graph</button>
-            <button type="button" id="save" class="btn btn-secondary">Save Graph</button>
-            <button type="button" id="clear" class="btn btn-secondary">Clear Graph</button>
+          <button type="button" id="update" style="height:30px; width:230px" class="btn btn-secondary">Update Graph</button>
+          <!-- <button type="button" id="save" class="btn btn-secondary">Save Graph</button> -->
+          <button type="button" id="clear"  style="height:30px; width:230px" class="btn btn-secondary">Clear Graph</button>
         </div>
         </form>
     </div>
@@ -73,21 +75,16 @@
             $displayed = '#' + $newSubject + 'dropdown';
             $($displayed).removeClass('hidden');
         });
-
         var json_data = {{ data | tojson }};
         var saved_state;
         var cur_state;
-
         clearChart();
-
         $("#update").click(updateChart);
         $("#clear").click(clearChart);
         $("#save").click(saveChart);
-
         function saveChart() {
             saved_state = cur_state;
         }
-
         function clearChart() {
             $('#myChart').remove(); // this is my <canvas> element
             saved_state = {
@@ -97,45 +94,37 @@
             };
             cur_state = saved_state;
         }
-
         function updateChart() {
             $('#myChart').remove(); // this is my <canvas> element
             $('#graph').append('<canvas height="40%" width="100%" id="myChart"><canvas>');
             var ctx = document.getElementById('myChart').getContext('2d');
             var subject = $("#subjectpicker").val();
             var classNo = $("#" + subject + "picker").val();
-
             cur_class = {
                 subject: subject,
                 classNo: classNo,
             };
-
             cur_state = {
                 labels: saved_state["labels"],
                 datasets: saved_state["datasets"],
                 classes: saved_state["classes"]
             }
-
             // check if adding class that is already added
             var parsed = false;
             for (course in cur_state["classes"])
                 if (JSON.stringify(cur_class) === JSON.stringify(course))
                     parsed = true;
-
             if (!parsed) {
                 // add labels
                 for (label of json_data[subject][classNo][0])
                     cur_state["labels"].push(label);
                 cur_state["labels"] = [...new Set(cur_state["labels"])].sort(labelCompare);
-
                 cur_state["classes"].push(cur_class);
-
                 var color = rainbow(cur_state["classes"].length);
-
                 cur_state["datasets"].push({
                     label: subject + " " + classNo + " - Current Enrollment",
                     backgroundColor: 'transparent',
-                    borderColor: shadeBlendConvert(0.7, color),
+                    borderColor: shadeBlendConvert(.1, color),
                     lineTension: 0,
                     data: json_data[subject][classNo][1].map(Number),
                 });
@@ -143,11 +132,11 @@
                     label: subject + " " + classNo + " - Max Enrollment",
                     backgroundColor: 'transparent',
                     borderColor: color,
+                    borderDash: [10,8],
                     lineTension: 0,
                     data: json_data[subject][classNo][2].map(Number),
                 })
             }
-
             var chart = new Chart(ctx, {
                 // The type of chart we want to create
                 type: 'line',
@@ -160,11 +149,9 @@
                 }
             });
         }
-
         function labelCompare(l1, l2) {
             tokenized1 = l1.split(" ");
             tokenized2 = l2.split(" ");
-
             if (tokenized1[1] < tokenized2[1])
                 return -1;
             else if (tokenized1[1] > tokenized2[1])
@@ -175,10 +162,8 @@
                 else if (tokenized1[0] > tokenized2[0]) // spring > fall
                     return -1;
             }
-
             return 0;
         }
-
         function rainbow(step) {
             var numOfSteps = 8;
             var r, g, b;
@@ -197,7 +182,6 @@
             var c = "#" + ("00" + (~ ~(r * 255)).toString(16)).slice(-2) + ("00" + (~ ~(g * 255)).toString(16)).slice(-2) + ("00" + (~ ~(b * 255)).toString(16)).slice(-2);
             return (c);
         }
-
         const shadeBlendConvert = function (p, from, to) {
             if (typeof (p) != "number" || p < -1 || p > 1 || typeof (from) != "string" || (from[0] != 'r' && from[0] != '#') || (to && typeof (to) != "string")) return null; //ErrorCheck
             if (!this.sbcRip) this.sbcRip = (d) => {
