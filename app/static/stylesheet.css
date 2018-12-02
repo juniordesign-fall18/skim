@@ -1,0 +1,57 @@
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: white;
+}
+
+.navbar {
+    float: left;
+}
+
+a.navbar {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+a.navbar:hover:not(.active) {
+    background-color: white
+}
+
+.active {
+    background-color: white;
+}
+
+.box{
+  rx:20;
+  width:200 ;
+  height: 100;
+  fill:#44bded;
+  opacity:0.5;
+}
+.textbox{
+  font-family: Helvetica;
+  font-size:15;
+  fill:black;
+  word-wrap: break-word;
+}
+.header{
+  color:black;
+}
+
+.feedback{
+  float: center;
+  color: white;
+}
+
+.milklogo{
+float:left;
+padding: 8px;
+width:-10%;
+height:-10%;
+
+}

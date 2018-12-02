@@ -3,7 +3,9 @@ import pyrebase
 import datetime
 import json
 import urllib.request
+# app._static_folder = app.path.abspath("static/style.css")
 from flask import render_template, request
+
 
 config = {
   "apiKey": "AIzaSyB5bnl9QMIeQRFHg5Io5CfKEFLCTyMGIYU",

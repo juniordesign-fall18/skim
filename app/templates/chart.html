@@ -3,8 +3,8 @@
 
 <head>
     <title>Skim</title>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+     <link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='stylesheet.css') }}"/>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -25,21 +25,46 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
 
+
+
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
 
     <!-- Chart.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 
+
     <style>
         .hidden{ display:none;}
     </style>
-
 </head>
 
 <body>
-  
-    <div class="col-sm-3">
+  <ul>
+    <img class="milklogo" class="img-responsive" src="../static/milklogo1.png" alt="SKIM LOGO">
+    <li class="navbar" ><a class="active" href="#home">SKIM</a></li>
+    <!-- <li class="navbar2"><a>You have added a class!</a></li> -->
+        </ul>
+          <div class="col-sm-3">
+            <svg height="10%" width="70%" class="box">
+              <rect height="60%" width="100%" id="myRect" rx="10" ry="10">
+              </rect>
+              <text id="myText" font-size="14" font-family="arial" fill="black">
+                <tspan x="10" y="20">START HERE
+                </tspan></text>
+              <text id="myText" font-size="14" font-family="arial" fill="white">
+              <tspan y="35" x="10">
+                Start by choosing a
+              </tspan>
+              <tspan x="10" dy="14">
+                subject below to add a
+              </tspan>
+                 <tspan x="10" dy="14">
+                    class to the graph.
+                  </tspan>
+      </text>
+
+      </svg>
         <div id="subjectdropdown">
             <select id="subjectpicker" class="selectpicker" data-live-search="true" title="Choose a subject">
                 {% for subject in data.keys() | sort %}
@@ -57,9 +82,9 @@
         </div>
         {% endfor %}
         <div class="row row-space">
-          <button type="button" id="update" style="height:30px; width:230px" class="btn btn-secondary">Update Graph</button>
+          <button type="button" id="update" style="height:30px; width:230px" class="btn btn-secondary">Add Class</button>
           <!-- <button type="button" id="save" class="btn btn-secondary">Save Graph</button> -->
-          <button type="button" id="clear"  style="height:30px; width:230px" class="btn btn-secondary">Clear Graph</button>
+          <button type="button" id="clear"  style="height:30px; width:230px" class="btn btn-secondary">Clear Classes</button>
         </div>
         </form>
     </div>
@@ -82,6 +107,7 @@
         $("#update").click(updateChart);
         $("#clear").click(clearChart);
         $("#save").click(saveChart);
+
         function saveChart() {
             saved_state = cur_state;
         }
@@ -138,16 +164,23 @@
                 })
             }
             var chart = new Chart(ctx, {
-                // The type of chart we want to create
-                type: 'line',
-                // The data for our dataset
-                data: {
-                    labels: cur_state["labels"],
-                    datasets: cur_state["datasets"],
-                    // Configuration options go here
-                    options: {}
-                }
-            });
+              // The type of chart we want to create
+            type: 'line',
+            // The data for our dataset
+            data: {
+                labels: cur_state["labels"],
+                datasets: cur_state["datasets"],
+                // Configuration options go here
+                options: {}
+            },
+            options: {
+              legend: {
+                  display: true,
+                  position: 'bottom',
+                  backgroundColor: 'rgb(105,105,105)'
+              }
+          }
+        });
         }
         function labelCompare(l1, l2) {
             tokenized1 = l1.split(" ");
