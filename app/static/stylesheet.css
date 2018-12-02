@@ -3,27 +3,64 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: white;
+    background-color: black;
 }
 
 .navbar {
     float: left;
 }
 
-a.navbar {
+.bootstrap-select .btn{
+ width:200px !important;
+
+}
+
+.bootstrap-select .dropdown-menu{
+  min-width:180px !important;
+}
+
+#update{
+  opacity: 0.5;
+  margin-left: 16px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  border: none;
+  min-width:170px !important;
+}
+
+#clear{
+  background-color:#da1d00;
+  margin-left: 16px;
+  border: none;
+  color:black;
+  min-width:170px !important;
+}
+
+#bootstrap-override {
+  display: block;
+  color: black;
+  text-align: center;
+  height: 45px;
+  text-decoration: none;
+}
+
+/* .navbar {
     display: block;
     color: white;
     text-align: center;
-    padding: 14px 16px;
+    height: 5px;
     text-decoration: none;
-}
+} */
 
 a.navbar:hover:not(.active) {
-    background-color: white
+    background-color: black
 }
 
 .active {
-    background-color: white;
+    color: white;
+    background-color: black;
+    font-family: Helvetica;
+    font-size: 16px;
 }
 
 .box{

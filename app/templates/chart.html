@@ -40,11 +40,14 @@
 </head>
 
 <body>
-  <ul>
+  <ul id="bootstrap-override">
     <img class="milklogo" class="img-responsive" src="../static/milklogo1.png" alt="SKIM LOGO">
     <li class="navbar" ><a class="active" href="#home">SKIM</a></li>
     <!-- <li class="navbar2"><a>You have added a class!</a></li> -->
         </ul>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+  <span aria-hidden="true">&times;</span>
+</button>
           <div class="col-sm-3">
             <svg height="10%" width="70%" class="box">
               <rect height="60%" width="100%" id="myRect" rx="10" ry="10">
@@ -64,7 +67,7 @@
                   </tspan>
       </text>
 
-      </svg>
+    </svg>
         <div id="subjectdropdown">
             <select id="subjectpicker" class="selectpicker" data-live-search="true" title="Choose a subject">
                 {% for subject in data.keys() | sort %}
@@ -82,9 +85,9 @@
         </div>
         {% endfor %}
         <div class="row row-space">
-          <button type="button" id="update" style="height:30px; width:230px" class="btn btn-secondary">Add Class</button>
+          <button type="button" id="update" style="height:30px; width:200px" class="btn btn-secondary">Add Class</button>
           <!-- <button type="button" id="save" class="btn btn-secondary">Save Graph</button> -->
-          <button type="button" id="clear"  style="height:30px; width:230px" class="btn btn-secondary">Clear Classes</button>
+          <button type="button" id="clear"  style="height:30px; width:200px" class="btn btn-secondary">Clear Classes</button>
         </div>
         </form>
     </div>
@@ -107,6 +110,11 @@
         $("#update").click(updateChart);
         $("#clear").click(clearChart);
         $("#save").click(saveChart);
+
+        function feedbackalert(){
+        //  var feedback-string ="You have added class " + subject + classNo;
+            // check if adding class that is already adde
+        }
 
         function saveChart() {
             saved_state = cur_state;
@@ -134,8 +142,8 @@
                 labels: saved_state["labels"],
                 datasets: saved_state["datasets"],
                 classes: saved_state["classes"]
+
             }
-            // check if adding class that is already added
             var parsed = false;
             for (course in cur_state["classes"])
                 if (JSON.stringify(cur_class) === JSON.stringify(course))
@@ -162,6 +170,7 @@
                     lineTension: 0,
                     data: json_data[subject][classNo][2].map(Number),
                 })
+
             }
             var chart = new Chart(ctx, {
               // The type of chart we want to create
@@ -181,6 +190,7 @@
               }
           }
         });
+           $("#alert").text("you have an alert");
         }
         function labelCompare(l1, l2) {
             tokenized1 = l1.split(" ");
