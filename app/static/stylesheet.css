@@ -59,7 +59,7 @@ a.navbar:hover:not(.active) {
 .active {
     color: white;
     background-color: black;
-    font-family: Helvetica;
+    font-family: 'Gugi', cursive;
     font-size: 16px;
 }
 
@@ -91,4 +91,14 @@ padding: 8px;
 width:-10%;
 height:-10%;
 
+}
+.invisible{
+  display:none;
+}
+
+#alert-space{
+  height:40px;
+}
+#rect-space{
+  height:40px;
 }

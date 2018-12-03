@@ -8,6 +8,7 @@
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Gugi" rel="stylesheet">
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -42,21 +43,22 @@
 <body>
   <ul id="bootstrap-override">
     <img class="milklogo" class="img-responsive" src="../static/milklogo1.png" alt="SKIM LOGO">
-    <li class="navbar" ><a class="active" href="#home">SKIM</a></li>
+    <li class="navbar" ><a class="active" href="#home">skim</a></li>
     <!-- <li class="navbar2"><a>You have added a class!</a></li> -->
-        </ul>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  <span aria-hidden="true">&times;</span>
-</button>
+  </ul>
+
+
+
           <div class="col-sm-3">
+            <div id="rect-space"></div>
             <svg height="10%" width="70%" class="box">
               <rect height="60%" width="100%" id="myRect" rx="10" ry="10">
               </rect>
               <text id="myText" font-size="14" font-family="arial" fill="black">
-                <tspan x="10" y="20">START HERE
+                <tspan x="10" y="20">Start Here
                 </tspan></text>
               <text id="myText" font-size="14" font-family="arial" fill="white">
-              <tspan y="35" x="10">
+              <tspan x="10" y="45">
                 Start by choosing a
               </tspan>
               <tspan x="10" dy="14">
@@ -68,6 +70,7 @@
       </text>
 
     </svg>
+
         <div id="subjectdropdown">
             <select id="subjectpicker" class="selectpicker" data-live-search="true" title="Choose a subject">
                 {% for subject in data.keys() | sort %}
@@ -86,13 +89,17 @@
         {% endfor %}
         <div class="row row-space">
           <button type="button" id="update" style="height:30px; width:200px" class="btn btn-secondary">Add Class</button>
-          <!-- <button type="button" id="save" class="btn btn-secondary">Save Graph</button> -->
           <button type="button" id="clear"  style="height:30px; width:200px" class="btn btn-secondary">Clear Classes</button>
         </div>
         </form>
     </div>
     <div id="graph" class="col-sm-9">
-        <canvas height="40%" width="100%" id="myChart"></canvas>
+      <div id="alert-space">  <div class="alert alert-success invisible" id="alert" role="alert">
+      </div>
+    </div>
+        <canvas height="40%" width="100%" id="myChart">
+        </canvas>
+
     </div>
     <script>
         $displayed = "";
@@ -190,7 +197,11 @@
               }
           }
         });
-           $("#alert").text("you have an alert");
+           $("#alert").text("You have added class " + subject + " "+ classNo);
+           document.getElementById('alert').classList.remove('invisible')
+           setTimeout(function() {
+             document.getElementById('alert').classList.add('invisible')
+           }, 5 * 1000)
         }
         function labelCompare(l1, l2) {
             tokenized1 = l1.split(" ");
